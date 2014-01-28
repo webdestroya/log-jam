@@ -1,0 +1,47 @@
+div.log-terminal {
+  background-color: #111;
+
+  position: absolute;
+  top: 51px;
+  left: 0;
+  right: 0;
+  bottom: 32px;
+  overflow-y: scroll;
+
+  ul {
+    li {
+      color: #ddd;
+      font-family: monaco,monospace,courier,'courier new','Bitstream Vera Sans Mono';
+      font-size:12px;
+    }
+    time {
+      margin-left: 2ex;
+      margin-right: 1ex;
+      color: #ddd;
+    }
+    span.system {
+      margin-right: 1ex;
+      color: rgb(37, 140, 205);
+      background-color: #262626;
+      &:after {
+        content: ':';
+      }
+    }
+    span.message {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  }
+}
+
+div.log-dashboard {
+  border-top: 1px solid rgb(37, 140, 205);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 32px;
+  line-height: 32px;
+  padding-left: 2em;
+  padding-right: 2em;
+}

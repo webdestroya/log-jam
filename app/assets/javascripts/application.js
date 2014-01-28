@@ -13,4 +13,20 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+//
+//= require underscore
+//
+//= require moment
+//
+//= require jquery.scrollTo.min
+//
+//= require bootstrap/modal
+//= require bootstrap/dropdown
+//= require bootstrap/tooltip
+//= require bootstrap/popover
+//= require bootstrap/alert
+//= require bootstrap/button
+//= require bootstrap/transition
+//= require bootstrap/collapse
+//
+//= require logview

@@ -15,6 +15,10 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
 
+gem 'underscore-rails'
+gem 'momentjs-rails'
+gem 'jquery-scrollto-rails'
+
 gem 'slim'
 gem 'slim-rails'
 
@@ -65,6 +69,8 @@ group :development do
 
   gem 'pry-rails'
 end
+
+gem 'elasticsearch-api'
 
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development

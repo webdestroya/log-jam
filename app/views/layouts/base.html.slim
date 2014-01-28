@@ -15,42 +15,34 @@ html lang="en"
     / Bootstrap core CSS 
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
 
-    <%= render 'shared/analytics' %>
+    = javascript_include_tag "application"
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
+  body
 
-  <body>
+    div class="navbar navbar-inverse navbar-fixed-top" role="navigation"
+      div class="navbar-header"
+        button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"
+          span class="sr-only" Toggle navigation
+          span class="icon-bar"
+          span class="icon-bar"
+          span class="icon-bar"
+        = link_to 'Log Jam', '#', class: 'navbar-brand'
 
-    <%= render 'shared/top_navbar' %>
+      div class="navbar-collapse collapse"
+        ul class="nav navbar-nav"
+          li
+            = link_to 'Home', '#'
+        p class="navbar-text navbar-right" id="network-indicator" style="display:none;"
+          | Loading...
+        / ul class="nav navbar-nav navbar-right"
+        /   li
+        /     = link_to 'Sign Out', '#', method: :delete
+        
+    = content_for?(:content) ? yield(:content) : yield
 
-    <%= content_for?(:content) ? yield(:content) : yield %>
+    / div class="container"
+    /   footer
+    /     p
+    /       strong Log-Jam
 
-    <div class="container">
-      <footer>
-        <p>
-          <strong>Door Attendant</strong><br/>
-          &copy; <%= Time.now.year %> Mitch Dempsey
-        </p>
-      </footer>
-    </div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-
-    <% if controller.controller_name.eql?('billing') %>
-    <%= javascript_include_tag "https://js.stripe.com/v2/" %>
-    <script type="text/javascript">
-    Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_key] %>');
-    </script>
-    <% end %>
-
-    <%= javascript_include_tag "application" %>
-  </body>
-</html>
+    
