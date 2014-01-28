@@ -1,0 +1,6 @@
+elasticsearch:
+  host: localhost
+  port: 9200
+
+refresh_logs: 1500
+batch_size: 1000

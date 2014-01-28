@@ -18,6 +18,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'underscore-rails'
 gem 'momentjs-rails'
 gem 'jquery-scrollto-rails'
+gem 'handlebars_assets'
 
 gem 'slim'
 gem 'slim-rails'

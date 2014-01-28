@@ -3,5 +3,5 @@ div class='log-terminal'
 div class='log-dashboard'
   | blah
 
-script
-  | logview = new LogView()
+javascript:
+  var logview = new LogView(#{@settings.to_json.html_safe})

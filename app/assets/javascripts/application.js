@@ -29,4 +29,7 @@
 //= require bootstrap/transition
 //= require bootstrap/collapse
 //
+//= require handlebars.runtime
+//= require_tree ./templates
+//
 //= require logview

@@ -4,19 +4,22 @@ class LogView
 
 
 
-  constructor: ->
+  constructor: (@options={}) ->
     @terminal = $("div.log-terminal")
     @terminal_list = $("<ul class='list-unstyled'></ul>")
     @indicator = $("#network-indicator")
     @terminal.append(@terminal_list)
+
+    # set the marker
     @last_from = 0
+
     # Setup the jsonp handler
     window.logjam_handler = _.bind(@handleLogResponse, this)
 
     @findStartingPositions()
 
   findStartingPositions: ->
-    $.ajax "http://localhost:9200/logjam-#{moment().format('YYYY.MM')}/_stats",
+    $.ajax "http://#{@options.elasticsearch_address}/logjam-#{moment().format('YYYY.MM')}/_stats",
       dataType: 'jsonp'
       jsonp: 'callback'
       success: _.bind(@handleStartingPositions, this)
@@ -30,10 +33,10 @@ class LogView
 
   pollLogLines: ->
     @indicator.show()
-    $.ajax "http://localhost:9200/logjam-#{moment().format('YYYY.MM')}/_search",
+    $.ajax "http://#{@options.elasticsearch_address}/logjam-#{moment().format('YYYY.MM')}/_search",
       data: 
         sort: "@timestamp:asc"
-        size: 100
+        size: @options.batch_size
         from: @last_from
       dataType: 'jsonp'
       jsonp: 'callback'
@@ -49,12 +52,16 @@ class LogView
     isAtBottom = @isScrolledToBottom()
 
     for hit in data.hits.hits
-      time = moment(hit._source['@timestamp']).format("MMM D HH:mm:ss")
-      message = $("<span>").text(hit._source.message).html()
-      @terminal_list.append("<li><time datetime=\"#{hit._source['@timestamp']}\">#{time}</time><span class='system'>#{hit._source.tag}</span><span class='message'>#{message}</span></li>")
+      @terminal_list.append HandlebarsTemplates.log_line
+        pretty_time: moment(hit._source['@timestamp']).format("MMM D HH:mm:ss")
+        datetime: hit._source['@timestamp']
+        system: hit._source.tag
+        message: hit._source.message
 
+    # Only scroll to the bottom if they were *at* the bottom of the page
     @tailScroll() if isAtBottom
-    window.setTimeout(_.bind(@pollLogLines, this), 5000)
+
+    window.setTimeout _.bind(@pollLogLines, this), @options.refresh_logs
     return
 
   isScrolledToBottom: ->
