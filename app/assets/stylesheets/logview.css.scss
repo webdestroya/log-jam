@@ -1,3 +1,5 @@
+$bottom_height: 65px;
+
 div.log-terminal {
   background-color: #111;
 
@@ -5,17 +7,17 @@ div.log-terminal {
   top: 51px;
   left: 0;
   right: 0;
-  bottom: 32px;
+  bottom: $bottom_height;
   overflow-y: scroll;
 
   ul {
     li {
       color: #ddd;
       font-family: monaco,monospace,courier,'courier new','Bitstream Vera Sans Mono';
-      font-size:12px;
+      font-size: 12px;
     }
     time {
-      margin-left: 2ex;
+      margin-left: 1ex;
       margin-right: 1ex;
       color: rgb(181, 137, 0);
       background-color: #262626;
@@ -36,13 +38,30 @@ div.log-terminal {
 }
 
 div.log-dashboard {
-  border-top: 1px solid rgb(37, 140, 205);
+  border-top: 3px solid #ddd;
+  background-color: #222;
   position: absolute;
+  color: #ddd;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 32px;
-  line-height: 32px;
-  padding-left: 2em;
+  height: $bottom_height;
+  line-height: 24px;
+  padding-top: 7px;
+  padding-left: 1em;
   padding-right: 2em;
+
+  input {
+    width: 400px;
+    border: 1px solid #000;
+    padding-left: 1ex;
+  }
+
+  div.search-box {
+    padding-top: 10px;
+  }
+
+  #facets {
+    font-size:90%;
+  }
 }

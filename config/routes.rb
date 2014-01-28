@@ -1,4 +1,5 @@
 LogJam::Application.routes.draw do
+  get "facets", to: 'log_view#facets'
   get "log_view/index"
 
   root 'log_view#index'

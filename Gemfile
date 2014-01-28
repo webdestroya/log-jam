@@ -71,7 +71,7 @@ group :development do
   gem 'pry-rails'
 end
 
-gem 'elasticsearch-api'
+gem 'elasticsearch'#, require: 'elasticsearch/elasticsearch'
 
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development

@@ -9,4 +9,18 @@ class LogViewController < ApplicationController
 
     render layout: 'base'
   end
+
+  def facets
+    response = es_client.search index: "logjam-#{Time.zone.now.strftime("%Y.%m")}", body: {
+      facets: { tag: { terms: { field: "tag"} } }
+    }
+
+    render json: response
+  end
+
+  private
+
+  def es_client
+    @es_client ||= Elasticsearch::Client.new log: false
+  end
 end

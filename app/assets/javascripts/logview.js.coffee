@@ -8,6 +8,7 @@ class LogView
     @terminal = $("div.log-terminal")
     @terminal_list = $("<ul class='list-unstyled'></ul>")
     @indicator = $("#network-indicator")
+    @facets_div = $("#facets")
     @terminal.append(@terminal_list)
 
     # set the marker
@@ -16,6 +17,8 @@ class LogView
     # Setup the jsonp handler
     window.logjam_handler = _.bind(@handleLogResponse, this)
 
+    $("a[data-log-action='tail']").click _.bind(@clickTailAction, this)
+    @getSystemsList()
     @findStartingPositions()
 
   findStartingPositions: ->
@@ -26,8 +29,24 @@ class LogView
     return
 
   handleStartingPositions: (data) ->
-    @last_from = data._all.primaries.docs.count
+    @last_from = Math.max(data._all.primaries.docs.count - 1000, 0)
     @pollLogLines()
+    
+    return
+
+  getSystemsList: ->
+    $.ajax "/facets",
+      data: 
+        facets:
+          tag:
+            terms:
+              field: "tag"
+      success: _.bind(@processSystemsResponse, this)
+    return
+
+  processSystemsResponse: (data) ->
+    # console.log(data.facets)
+    @facets_div.html HandlebarsTemplates.facets(data.facets.tag)
     return
 
 
@@ -73,6 +92,11 @@ class LogView
   tailScroll: ->
     height = @terminal.get(0).scrollHeight
     @terminal.animate({scrollTop: height}, 100)
+    return
+
+  clickTailAction: (event) ->
+    event.preventDefault()
+    @tailScroll()
     return
 
   logResponseComplete: ->

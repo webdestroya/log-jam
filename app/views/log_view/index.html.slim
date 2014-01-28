@@ -1,7 +1,13 @@
 div class='log-terminal'
 
 div class='log-dashboard'
-  | blah
+  div class="row"
+    div class="col-md-4 search-box"
+      input type="text" name="search" id="search" placeholder="Search..." /
+    div class="col-md-7"
+      div id="facets"
+    div class="col-md-1"
+      a href="#" data-log-action="tail" Follow
 
 javascript:
   var logview = new LogView(#{@settings.to_json.html_safe})
