@@ -14,9 +14,6 @@ class LogView
     # set the marker
     @last_from = 0
 
-    # Setup the jsonp handler
-    window.logjam_handler = _.bind(@handleLogResponse, this)
-
     $("a[data-log-action='tail']").click _.bind(@clickTailAction, this)
     @getSystemsList()
     @findStartingPositions()
@@ -29,39 +26,30 @@ class LogView
     return
 
   handleStartingPositions: (data) ->
-    @last_from = Math.max(data._all.primaries.docs.count - 1000, 0)
+    @last_from = Math.max(data._all.primaries.docs.count - @options.batch_size, 0)
     @pollLogLines()
     
     return
 
   getSystemsList: ->
-    $.ajax "/facets",
-      data: 
-        facets:
-          tag:
-            terms:
-              field: "tag"
+    $.ajax "/stats/systems.json",
       success: _.bind(@processSystemsResponse, this)
     return
 
   processSystemsResponse: (data) ->
     # console.log(data.facets)
-    @facets_div.html HandlebarsTemplates.facets(data.facets.tag)
+    @facets_div.html HandlebarsTemplates.facets(data)
     return
 
 
   pollLogLines: ->
     @indicator.show()
-    $.ajax "http://#{@options.elasticsearch_address}/logjam-#{moment().format('YYYY.MM')}/_search",
-      data: 
-        sort: "@timestamp:asc"
+
+    $.ajax "/poll.json",
+      data:
         size: @options.batch_size
         from: @last_from
-      dataType: 'jsonp'
-      jsonp: 'callback'
-      jsonpCallback: 'logjam_handler'
-      # success: _.bind(@handleLogResponse, this)
-      # complete: _.bind(@logResponseComplete, this)
+      success: _.bind(@handleLogResponse, this)
     return
 
   handleLogResponse: (data) ->
@@ -72,10 +60,10 @@ class LogView
 
     for hit in data.hits.hits
       @terminal_list.append HandlebarsTemplates.log_line
-        pretty_time: moment(hit._source['@timestamp']).format("MMM D HH:mm:ss")
-        datetime: hit._source['@timestamp']
-        system: hit._source.tag
-        message: hit._source.message
+        pretty_time: moment(hit.fields['@timestamp']).format("MMM D HH:mm:ss")
+        datetime: hit.fields['@timestamp']
+        system: hit.fields.tag
+        message: hit.fields.message
 
     # Only scroll to the bottom if they were *at* the bottom of the page
     @tailScroll() if isAtBottom

@@ -10,17 +10,22 @@ class LogViewController < ApplicationController
     render layout: 'base'
   end
 
-  def facets
-    response = es_client.search index: "logjam-#{Time.zone.now.strftime("%Y.%m")}", body: {
-      facets: { tag: { terms: { field: "tag"} } }
+  def poll
+    batch_size = params[:size] || SETTINGS['batch_size']
+    from = params[:from] || "0"
+
+    query = {
+      sort: [{"@timestamp" => {order: 'asc'}}],
+      size: batch_size.to_i,
+      from: from.to_i,
+      fields: ['@timestamp', 'tag', 'message'],
+      explain: false
     }
 
+    response = es_client.search index: "logjam-#{Time.zone.now.strftime("%Y.%m")}", body: query
+
     render json: response
+
   end
 
-  private
-
-  def es_client
-    @es_client ||= Elasticsearch::Client.new log: false
-  end
 end

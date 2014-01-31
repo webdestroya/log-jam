@@ -1,6 +1,9 @@
 LogJam::Application.routes.draw do
+  get "stats/systems", to: 'log_stats#systems'
+  get "log_stats/stats"
   get "facets", to: 'log_view#facets'
-  get "log_view/index"
+  
+  get '/poll', to: 'log_view#poll'
 
   root 'log_view#index'
   # The priority is based upon order of creation: first created -> highest priority.
