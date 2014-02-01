@@ -21,6 +21,6 @@ class LogStatsController < ApplicationController
 
   def clear_index
     es_client.indices.delete index: es_index
-    render json: {status: 'ok'}
+    redirect_to root_path
   end
 end

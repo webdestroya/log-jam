@@ -26,9 +26,22 @@ class LogView
     @start_from = 0
     @logs_loaded = false
 
+    $("a.clear-search").click _.bind(@clickClearSearch, this)
+
     $("a[data-log-action='tail']").click _.bind(@clickTailAction, this)
 
     @getSystemsList()
+
+  clickClearSearch: (event) ->
+    event.preventDefault()
+    @search_input.val ""
+    if @query_filter != ""
+      @filterLogs()
+
+    @search_input.focus()
+
+    return
+
 
   searchKeyDown: (event) ->
     if event.keyCode == 13
@@ -59,12 +72,6 @@ class LogView
       @system_filter.push sys
       @terminal_list.find("li[data-system='#{sys}']").show()
     return
-
-  # findStartingPositions: ->
-  #   $.ajax "/stats/systems.json",
-  #     success: _.bind(@handleStartingPositions, this)
-  #     error: _.bind(@handleInitError, this)
-  #   return
 
   handleInitError: (data) ->
     if data.status == 404
@@ -113,16 +120,13 @@ class LogView
 
   clickSystemFilter: (event) ->
     event.preventDefault()
-
     $(event.target).parent().toggleClass "selected"
-
     @filterSystems()
-
     return
 
 
   pollLogLines: ->
-    @indicator.show()
+    # @indicator.show()
 
     $.ajax "/poll.json",
       data:
@@ -133,7 +137,7 @@ class LogView
     return
 
   handleLogResponse: (data) ->
-    @indicator.hide()
+    # @indicator.hide()
     @last_from = @last_from + data.hits.hits.length
 
     isAtBottom = @isScrolledToBottom()
@@ -145,6 +149,7 @@ class LogView
         system: hit.fields.tag
         message: hit.fields.message
         filtered: !@isSystemAllowed(hit.fields.tag)
+        cssClasses: @customLogLineHighlights(hit.fields.message)
 
       # if !@isSystemAllowed(hit.fields.tag)
       #   console.log("Filtered: #{hit.fields.tag}")
@@ -155,15 +160,19 @@ class LogView
     window.setTimeout _.bind(@pollLogLines, this), @options.refresh_logs
     return
 
+  # Checks to see if this system should be hidden by default
+  # because it is filtered
   isSystemAllowed: (system) ->
     return @system_filter.length == 0 || @system_filter.indexOf(system) != -1
 
+  # Check to see if the user is currently at the bottom of the log list
   isScrolledToBottom: ->
     height = @terminal.get(0).scrollHeight
     scrollTop = @terminal.get(0).scrollTop
     outerHeight = @terminal.outerHeight()
     return (height - scrollTop) == outerHeight
 
+  # scroll to the bottom of the log terminal
   tailScroll: ->
     height = @terminal.get(0).scrollHeight
     @terminal.animate({scrollTop: height}, 100)
@@ -173,6 +182,16 @@ class LogView
     event.preventDefault()
     @tailScroll()
     return
+
+
+  customLogLineHighlights: (message) ->
+
+    cssClasses = []
+
+    cssClasses.push("error") if /level=ERROR/.test(message)
+    cssClasses.push("error") if /level=FATAL/.test(message)
+
+    return cssClasses.join(' ')
 
 
 

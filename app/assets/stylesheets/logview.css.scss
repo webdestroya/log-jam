@@ -41,7 +41,11 @@ div.log-terminal {
     span.message {
       white-space: pre-wrap;
       word-wrap: break-word;
+
+      &.error {color: #d00;}
+      &.info {color: #d00;}
     }
+
   }
 }
 

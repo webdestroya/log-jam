@@ -1,6 +1,7 @@
 elasticsearch:
   host: localhost
   port: 9200
+  index_format: "logjam-%Y.%m"
 
 refresh_logs: 1500
 batch_size: 1000

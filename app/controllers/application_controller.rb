@@ -10,7 +10,8 @@ class ApplicationController < ActionController::Base
   end
 
   def es_index
-    "logjam-#{Time.zone.now.utc.strftime("%Y.%m")}"
+    # "logjam-#{Time.zone.now.utc.strftime("%Y.%m")}"
+    Time.zone.now.utc.strftime SETTINGS['elasticsearch']['index_format']
   end
 
 end
