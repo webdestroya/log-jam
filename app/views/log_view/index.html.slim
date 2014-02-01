@@ -1,5 +1,5 @@
 div class='log-terminal'
-  div class="log-info-message"
+  div class="log-info-message" style="display:none;"
     | Problem
 
 div class='log-dashboard'
@@ -11,7 +11,9 @@ div class='log-dashboard'
     div class="col-md-7"
       div id="facets"
     div class="col-md-1"
-      a href="#" data-log-action="tail" Follow
+      a href="#follow" data-log-action="tail" Follow
+      br /
+      = link_to 'Clear Index', clear_index_path, method: :delete, data: {confirm: 'Are you sure? This will wipe out the elastic search index'}
 
 javascript:
   var logview = new LogView(#{@settings.to_json.html_safe})

@@ -32,8 +32,6 @@ html lang="en"
         ul class="nav navbar-nav"
           li
             = link_to 'Home', '#'
-          li
-            = link_to 'Clear Index', clear_index_path, method: :delete, data: {confirm: 'Are you sure?'}
         p class="navbar-text navbar-right" id="network-indicator" style="display:none;"
           | Loading...
         / ul class="nav navbar-nav navbar-right"
@@ -42,9 +40,3 @@ html lang="en"
         
     = content_for?(:content) ? yield(:content) : yield
 
-    / div class="container"
-    /   footer
-    /     p
-    /       strong Log-Jam
-
-    

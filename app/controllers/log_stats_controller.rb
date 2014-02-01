@@ -16,11 +16,10 @@ class LogStatsController < ApplicationController
     render json: {status: 404}, status: 404
   end
 
-  def stats
-  end
 
   def clear_index
     es_client.indices.delete index: es_index
+  ensure
     redirect_to root_path
   end
 end
