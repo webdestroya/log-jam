@@ -22,7 +22,24 @@ class LogViewController < ApplicationController
       explain: false
     }
 
-    response = es_client.search index: "logjam-#{Time.zone.now.strftime("%Y.%m")}", body: query
+    if params[:q].present? && params[:q].size > 0
+      query[:query] = {
+        query_string: {
+          default_field: "message",
+          query: params[:q]
+        }
+      }
+    end
+
+    if params[:system].present?
+      query[:post_filter] = {
+        term: { 
+          tag: params[:system] 
+        }
+      }
+    end
+
+    response = es_client.search index: es_index, body: query
 
     render json: response
 

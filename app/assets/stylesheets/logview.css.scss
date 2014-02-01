@@ -10,6 +10,14 @@ div.log-terminal {
   bottom: $bottom_height;
   overflow-y: scroll;
 
+  div.log-info-message {
+    margin: 0 auto;
+    padding-top:10%;
+    color:#ddd;
+    text-align: center;
+    font-size: 2em;
+  }
+
   ul {
     li {
       color: #ddd;
@@ -63,5 +71,15 @@ div.log-dashboard {
 
   #facets {
     font-size:90%;
+
+    span.system {
+      border: 1px solid #222;
+      padding:1px;
+    }
+
+    span.selected {
+      background-color: #111;
+      border: 1px solid #333;
+    }
   }
 }

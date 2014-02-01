@@ -8,4 +8,9 @@ class ApplicationController < ActionController::Base
   def es_client
     @es_client ||= Elasticsearch::Client.new log: false, hosts: "#{SETTINGS['elasticsearch']['host']}:#{SETTINGS['elasticsearch']['port']}"
   end
+
+  def es_index
+    "logjam-#{Time.zone.now.utc.strftime("%Y.%m")}"
+  end
+
 end
